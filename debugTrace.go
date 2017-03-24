@@ -21,12 +21,12 @@ const (
  TraceLevel8 int = 7
  TraceLevel9 int = 8
  TraceLevel10 int = 9
- MAXLEVEL int = 10
+ MAXLEVEL int = 9
 )
 
 
 // Trace(str) will print the caller function name and the code line number
-// only print current level 0 start from the caller.
+// only print current caller of Trace() (regard as TraceLevel1).
 func Trace(info string) {
 	pc := make([]uintptr, 1)
 
@@ -44,10 +44,10 @@ func Trace(info string) {
 
 }
 
-// Trace(str) will print calling stack info from current Level 0 to the given level.
+// Trace(str) will print calling stack info from level of caller (TraceLevel1) to the given level (up to MAXLEVEL).
 func Trace2(info string, level int) {
 
-	pc := make([]uintptr, MAXLEVEL)
+	pc := make([]uintptr, MAXLEVEL + 1)
 
 	//get call stack, ommitting 2 elements on stack, which is runtime.Callers and Trace2, respectively
 	funcsNum := runtime.Callers(2 , pc)
