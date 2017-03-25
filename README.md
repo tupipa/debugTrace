@@ -18,7 +18,7 @@ package main
 import (
 	"os"
 	"fmt"
-	debugTrace "github.com/tupipa/debugTrace"
+	"github.com/tupipa/debugTrace"
 	"github.com/Sirupsen/logrus"
 	)
 
@@ -26,23 +26,24 @@ func test() int{
 	i := 1
 	i += i
 	//print only current function info
-    debugTrace.Trace("")
-	
-	debugTrace.Trace2("5 Levels on top of the call stack", debugTrace.TraceLevel5)
+    	debugTrace.Trace("Print the CODE LINE and FUNCTION NAME Here")
+
+	debugTrace.Trace2("Print (up to) 5 LEVELS OF CALLED FUNCTIONS on stack", debugTrace.TraceLevel5)
+
     return i
 }
 
 func main(){
-    //set up the debug io directions and format
+    	//set up the debug io directions and format
 	logrus.SetOutput(os.Stdout)
 	logrus.SetLevel(logrus.DebugLevel)
 
-    //call functions
+    	//call functions
 	c := test()
 	fmt.Printf("get i: %d\n", c)
-	
-    //print call stack info of current function(main)
-    debugTrace.Trace("main")
+
+    	//print call stack info of current function(main)
+    	debugTrace.Trace2("Print (up to) 6 LEVELS OF CALLED FUNCTIONS on stack", debugTrace.TraceLevel6)
 }
 
 ```
@@ -51,11 +52,13 @@ run ```go build``` in $GOPATH/github.com/yourid/repo
 output will be something like:
 
 ```
-DEBU[0000] Lele: $GOPATH/github.com/yourid/repo/samplecode.go:16; funcName: 'main.test' 
-DEBU[0000] Lele: 5 Levels on top of the call stack, $GOPATH/github.com/yourid/repo/samplecode.go:17; funcName: 'main.test' 
-DEBU[0000] Lele: 5 Levels on top of the call stack, $GOPATH/github.com/yourid/repo/samplecode.go:26; funcName: 'main.main' 
-DEBU[0000] Lele: 5 Levels on top of the call stack, $GOROOT/src/runtime/proc.go:194; funcName: 'runtime.main' 
-DEBU[0000] Lele: 5 Levels on top of the call stack,  $GOROOTsrc/runtime/asm_amd64.s:2198; funcName: 'runtime.goexit' 
+DEBU[0000] Lele: Print the CODE LINE and FUNCTION NAME Here, /home/smeller/lab/gowork/src/github.com/tupipa/maingotest/maingotest2.go:16; funcName: 'main.test' 
+DEBU[0000] Lele: Print (up to) 5 LEVELS OF CALLED FUNCTIONS on stack, /home/smeller/lab/gowork/src/github.com/tupipa/maingotest/maingotest2.go:18; funcName: 'main.test' 
+DEBU[0000] Lele: Print (up to) 5 LEVELS OF CALLED FUNCTIONS on stack, /home/smeller/lab/gowork/src/github.com/tupipa/maingotest/maingotest2.go:27; funcName: 'main.main' 
+DEBU[0000] Lele: Print (up to) 5 LEVELS OF CALLED FUNCTIONS on stack, /home/smeller/programs/go/go/src/runtime/proc.go:194; funcName: 'runtime.main' 
+DEBU[0000] Lele: Print (up to) 5 LEVELS OF CALLED FUNCTIONS on stack, /home/smeller/programs/go/go/src/runtime/asm_amd64.s:2198; funcName: 'runtime.goexit' 
 get i: 2
-DEBU[0000] Lele: main, $GOPATH/github.com/yourid/repo/samplecode.go:31; funcName: 'main.main'
+DEBU[0000] Lele: Print (up to) 6 LEVELS OF CALLED FUNCTIONS on stack, /home/smeller/lab/gowork/src/github.com/tupipa/maingotest/maingotest2.go:32; funcName: 'main.main' 
+DEBU[0000] Lele: Print (up to) 6 LEVELS OF CALLED FUNCTIONS on stack, /home/smeller/programs/go/go/src/runtime/proc.go:194; funcName: 'runtime.main' 
+DEBU[0000] Lele: Print (up to) 6 LEVELS OF CALLED FUNCTIONS on stack, /home/smeller/programs/go/go/src/runtime/asm_amd64.s:2198; funcName: 'runtime.goexit' 
 ```
